@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>✨ Sign Language Video Chat ✨</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+      <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+</head>
+<body>
+    <!-- 🔐 LOGIN/REGISTRATION SCREEN -->
+    <div id="auth-container" class="auth-container">
+        <div class="auth-box">
+            <h1>🎥 Sign Language Translator</h1>
+            <p>Join our awesome video chat with sign language translation!</p>
+            
+            <div id="error-message" class="error-message"></div>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <h2>🔐 Login</h2>
+                
+                <input type="email" id="login-email" placeholder="Email" class="auth-input">
+                <input type="password" id="login-password" placeholder="Password" class="auth-input">
+                
+                <button id="login-email-btn" class="auth-btn primary">Login</button>
+                <button id="google-login-btn" class="auth-btn google">
+                    <span class="google-icon">G</span> Login with Google
+                </button>
+                
+                <p class="auth-switch">
+                    New here? <a href="#" id="show-signup">Create an account</a>
+                </p>
+            </div>
+            
+            <!-- Signup Form -->
+            <div id="signup-form" class="auth-form" style="display: none;">
+                <h2>🎉 Create Account</h2>
+                
+                <input type="text" id="signup-name" placeholder="Your Name" class="auth-input">
+                <input type="email" id="signup-email" placeholder="Email" class="auth-input">
+                <input type="password" id="signup-password" placeholder="Password (min 6 chars)" class="auth-input">
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="is-deaf">
+                    <label for="is-deaf">I use sign language (we'll optimize for you!)</label>
+                </div>
+                
+                <button id="signup-email-btn" class="auth-btn primary">Sign Up</button>
+                
+                <p class="auth-switch">
+                    Already have an account? <a href="#" id="show-login">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 💬 MAIN CHAT SCREEN (hidden until login) -->
+    <div id="chat-container" class="container" style="display: none;">
+        <!-- Top Bar with User Info -->
+        <div class="top-bar">
+            <div class="user-info">
+                👤 <span id="user-name">User</span>
+                <span class="user-status online">● Online</span>
+            </div>
+            <button id="logout-btn" class="logout-btn">🚪 Logout</button>
+        </div>
+        
+        <h1>🎥 Sign Language Translator Chat</h1>
+        
+        <div class="video-box">
+            <div class="video-container">
+                <h3>Your Camera 👤</h3>
+                <video id="local-video" autoplay muted></video>
+                <div class="video-label">You</div>
+            </div>
+            
+            <div class="video-container">
+                <h3>Friend's Camera 👥</h3>
+                <video id="remote-video" autoplay></video>
+                <div class="video-label" id="remote-user-name">Waiting for friend...</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn" class="btn">🚀 Start Chat</button>
+            <button id="detect-btn" class="btn">✋ Start Sign Detection</button>
+            <button id="reset-btn" class="btn">🔄 Clear Text</button>
+            <button id="speak-btn" class="btn">🔊 Speak Text</button>
+        </div>
+        
+        <div class="translation-box">
+            <h3>📝 Translated Text</h3>
+            <div id="text-output" class="text-display">
+                Your sign language will appear here as text...
+            </div>
+            <div class="text-stats">
+                <span>Words: <span id="word-count">0</span></span>
+                <span>Last sign: <span id="last-sign">-</span></span>
+            </div>
+        </div>
+        
+        <div class="status">
+            <p id="status">⏳ Please login to start chatting...</p>
+        </div>
+    </div>
+    
+    <!-- Load our scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    
+    <!-- Load Firebase config FIRST -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- Then load our app scripts -->
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <!-- Add this line AFTER app.js but BEFORE sign-language-detector.js -->
+    <script src="lobby.js"></script>
+    <script src="sign-language-detector.js"></script>
+</body>
+</html>
